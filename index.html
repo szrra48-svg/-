@@ -289,24 +289,54 @@
       <button class="btn" id="loginBtn">دخول</button>
 
       <div class="msg" id="loginMsg">اسم المستخدم أو كلمة المرور غير صحيحة.</div>
-      <p class="hint">بيانات الدخول: <span class="chip">user1</span> <span class="chip">12345</span></p>
+     <p class="hint">فضلاً أدخل اسم المستخدم وكلمة المرور.</p>
     </div>
   </section>
 
-  <!-- APP -->
-  <section id="appPage" class="hidden">
-    <header>
-      <div class="container">
-        <div class="topbar">
-          <div class="title">
-            <div class="logo" aria-hidden="true"></div>
-            <div style="min-width:0">
-              <h2 title="متابعة طلاب الاستاذ : سعيد الغامدي">متابعة طلاب الاستاذ : سعيد الغامدي</h2>
-              <p class="subtitle" id="todayLine"></p>
-            </div>
-          </div>
+  <!-- APP --><section id="loginPage" class="login-wrap">
+  <div class="login-card" style="padding:0; overflow:hidden">
+    <!-- Header -->
+    <div style="
+      padding:22px 22px 14px 22px;
+      background: linear-gradient(135deg, rgba(59,130,246,.28), rgba(34,197,94,.18));
+      border-bottom: 1px solid var(--border);
+    ">
+      <div class="brand" style="margin:0">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1 style="font-size:20px;margin:0 0 4px 0">متابعة طلاب الأستاذ: سعيد الغامدي</h1>
+          <p style="margin:0;color:var(--muted);font-size:13px;line-height:1.6">
+            تسجيل الدخول لإدارة الحضور والغياب بشكل منظم واحترافي
+          </p>
+        </div>
+      </div>
+    </div>
 
-          <div class="actions">
+    <!-- Body -->
+    <div style="padding:18px 22px 22px 22px">
+      <div class="field">
+        <label for="username">اسم المستخدم</label>
+        <input id="username" type="text" autocomplete="username" placeholder="مثال: user1" />
+      </div>
+
+      <div class="field">
+        <label for="password">كلمة المرور</label>
+        <input id="password" type="password" autocomplete="current-password" placeholder="•••••" />
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:12px">
+        <button class="btn" id="loginBtn" style="margin-top:0; flex:1">دخول</button>
+      </div>
+
+      <div class="msg" id="loginMsg">اسم المستخدم أو كلمة المرور غير صحيحة.</div>
+
+      <!-- ملاحظة بدون بيانات -->
+      <p class="hint" style="margin-top:12px">
+        ملاحظة: لا تشارك بيانات الدخول مع الآخرين.
+      </p>
+    </div>
+  </div>
+</section>
             <span class="chip" id="lastSaved">آخر حفظ: —</span>
             <button class="btn2 primary" id="exportCSV">تصدير CSV</button>
             <button class="btn2 danger" id="resetDay">إعادة تعيين اليوم</button>
