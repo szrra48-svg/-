@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>متابعة طلاب الاستاذ : سعيد الغامدي</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a30;
+      --card2:#0c162a;
+      --text:#e9eefc;
+      --muted:#a9b6d6;
+      --accent:#3b82f6;
+      --good:#22c55e;
+      --bad:#ef4444;
+      --warn:#f59e0b;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      --radius2:12px;
+      --font: system-ui, -apple-system, "Segoe UI", "Tahoma", "Cairo", "Tajawal", Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font);
+      background: radial-gradient(1200px 700px at 80% 10%, rgba(59,130,246,.25), transparent 60%),
+                  radial-gradient(900px 600px at 20% 80%, rgba(34,197,94,.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .hidden{display:none !important}
+
+    /* Login */
+    .login-wrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .login-card{
+      width:min(460px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:22px;
+      backdrop-filter: blur(8px);
+    }
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .logo{
+      width:46px;height:46px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(59,130,246,.9), rgba(34,197,94,.8));
+      box-shadow: 0 8px 18px rgba(59,130,246,.18);
+    }
+    .brand h1{font-size:18px;margin:0;line-height:1.4}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
+    .field{margin-top:12px}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(15,26,48,.6);
+      color:var(--text);
+      outline:none;
+    }
+    input:focus, select:focus{border-color: rgba(59,130,246,.55)}
+    .btn{
+      cursor:pointer;
+      border:none;
+      border-radius:12px;
+      padding:12px 14px;
+      font-weight:700;
+      background: var(--accent);
+      color:white;
+      width:100%;
+      margin-top:14px;
+      box-shadow: 0 10px 22px rgba(59,130,246,.22);
+    }
+    .btn:active{transform: translateY(1px)}
+    .msg{
+      margin-top:10px;
+      font-size:13px;
+      color:#ffd2d2;
+      background: rgba(239,68,68,.12);
+      border:1px solid rgba(239,68,68,.25);
+      padding:10px 12px;
+      border-radius:12px;
+      display:none;
+    }
+    .hint{color:var(--muted);font-size:12px;margin-top:8px}
+    .chip{
+      font-size:12px;
+      color: var(--muted);
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      padding:8px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+
+    /* App */
+    header{
+      position:sticky;top:0;z-index:5;
+      background: rgba(11,18,32,.65);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:12px 0;
+    }
+    .title{display:flex;align-items:center;gap:12px;min-width:0}
+    .title h2{margin:0;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .subtitle{margin:0;font-size:12px;color:var(--muted)}
+    .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .btn2{
+      cursor:pointer;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:9px 12px;
+      border-radius:12px;
+      font-weight:700;
+      font-size:13px;
+    }
+    .btn2.primary{background: rgba(59,130,246,.15); border-color: rgba(59,130,246,.35)}
+    .btn2.danger{background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.25)}
+    .btn2:active{transform: translateY(1px)}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      margin-top:16px;
+    }
+    @media (max-width: 900px){ .grid{grid-template-columns: 1fr} }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:14px;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+    }
+    @media (max-width: 900px){ .cards{grid-template-columns: repeat(2, 1fr)} }
+    @media (max-width: 420px){ .cards{grid-template-columns: 1fr} }
+
+    .stat{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(15,26,48,.55);
+    }
+    .stat .k{font-size:12px;color:var(--muted)}
+    .stat .v{font-size:20px;font-weight:900;margin-top:6px}
+    .v.good{color: var(--good)}
+    .v.bad{color: var(--bad)}
+    .v.accent{color: #93c5fd}
+
+    .filters{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr .6fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width: 700px){ .filters{grid-template-columns: 1fr} }
+
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0 8px;
+      margin-top:10px;
+    }
+    th{
+      text-align:right;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      padding:0 10px 6px 10px;
+      white-space:nowrap;
+    }
+    td{
+      padding:10px;
+      background: rgba(15,26,48,.55);
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      vertical-align:middle;
+    }
+    tr td:first-child{border-right:1px solid var(--border); border-radius: 0 14px 14px 0}
+    tr td:last-child{border-left:1px solid var(--border); border-radius: 14px 0 0 14px}
+
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:7px 10px;border-radius:999px;
+      font-size:12px;font-weight:800;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      white-space:nowrap;
+    }
+    .badge.good{border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.12); color: #b7f7cd}
+    .badge.bad{border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.12); color: #ffd2d2}
+
+    .cell-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-start}
+    .mini{
+      cursor:pointer;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:12px;
+      font-weight:800;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .mini.good{border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.12)}
+    .mini.bad{border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.12)}
+    .mini.warn{border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.12)}
+    .mini:active{transform: translateY(1px)}
+
+    .add-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+    @media (max-width: 700px){ .add-grid{grid-template-columns: 1fr} }
+
+    .divider{height:1px;background:var(--border);margin:12px 0}
+    .small{font-size:12px;color:var(--muted);margin:0}
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      bottom: 18px;
+      left: 18px;
+      right: 18px;
+      margin: 0 auto;
+      max-width: 520px;
+      background: rgba(15,26,48,.92);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 12px 14px;
+      color: var(--text);
+      display:none;
+      z-index: 999;
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+    }
+    .toast.show{display:block}
+  </style>
+</head>
+
+<body>
+  <!-- LOGIN -->
+  <section id="loginPage" class="login-wrap">
+    <div class="login-card">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>متابعة طلاب الاستاذ : سعيد الغامدي</h1>
+          <p>تسجيل الدخول لإدارة حضور وغياب الطلاب</p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="username">اسم المستخدم</label>
+        <input id="username" type="text" autocomplete="username" placeholder="اكتب اسم المستخدم" />
+      </div>
+
+      <div class="field">
+        <label for="password">كلمة المرور</label>
+        <input id="password" type="password" autocomplete="current-password" placeholder="اكتب كلمة المرور" />
+      </div>
+
+      <button class="btn" id="loginBtn">دخول</button>
+
+      <div class="msg" id="loginMsg">اسم المستخدم أو كلمة المرور غير صحيحة.</div>
+      <p class="hint">بيانات الدخول: <span class="chip">user1</span> <span class="chip">12345</span></p>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <section id="appPage" class="hidden">
+    <header>
+      <div class="container">
+        <div class="topbar">
+          <div class="title">
+            <div class="logo" aria-hidden="true"></div>
+            <div style="min-width:0">
+              <h2 title="متابعة طلاب الاستاذ : سعيد الغامدي">متابعة طلاب الاستاذ : سعيد الغامدي</h2>
+              <p class="subtitle" id="todayLine"></p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <span class="chip" id="lastSaved">آخر حفظ: —</span>
+            <button class="btn2 primary" id="exportCSV">تصدير CSV</button>
+            <button class="btn2 danger" id="resetDay">إعادة تعيين اليوم</button>
+            <button class="btn2" id="logoutBtn">خروج</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="grid">
+        <section class="card">
+          <div class="cards">
+            <div class="stat">
+              <div class="k">إجمالي الطلاب</div>
+              <div class="v accent" id="stTotal">0</div>
+            </div>
+            <div class="stat">
+              <div class="k">الحاضرون</div>
+              <div class="v good" id="stPresent">0</div>
+            </div>
+            <div class="stat">
+              <div class="k">الغائبون</div>
+              <div class="v bad" id="stAbsent">0</div>
+            </div>
+            <div class="stat">
+              <div class="k">نسبة الحضور</div>
+              <div class="v" id="stRate">0%</div>
+            </div>
+          </div>
+
+          <div class="filters">
+            <input id="searchBox" placeholder="بحث باسم الطالب..." />
+            <select id="classFilter">
+              <option value="">كل الصفوف</option>
+              <option value="رابع 1">رابع 1</option>
+              <option value="رابع 2">رابع 2</option>
+              <option value="خامس 1">خامس 1</option>
+              <option value="خامس 2">خامس 2</option>
+              <option value="سادس 1">سادس 1</option>
+              <option value="سادس 2">سادس 2</option>
+            </select>
+            <select id="statusFilter">
+              <option value="">الكل</option>
+              <option value="present">الحاضرون فقط</option>
+              <option value="absent">الغائبون فقط</option>
+            </select>
+          </div>
+
+          <div class="divider"></div>
+
+          <div style="overflow:auto">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:60px">م</th>
+                  <th>الاسم</th>
+                  <th style="width:170px">رقم الجوال</th>
+                  <th style="width:110px">الصف</th>
+                  <th style="width:120px">الحالة</th>
+                  <th style="width:340px">إجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTbody"></tbody>
+            </table>
+          </div>
+
+          <p class="hint">✅ عند جعل الطالب “غائب” يظهر زر واتساب + زر نسخ رسالة الإشعار.</p>
+        </section>
+
+        <aside class="card">
+          <h3 style="margin:6px 0 2px 0;font-size:15px">إضافة طالب</h3>
+          <p class="small">أضف طلابك يدويًا، أو عدّل البيانات داخل الكود لاحقًا.</p>
+
+          <div class="add-grid">
+            <div>
+              <label>اسم الطالب</label>
+              <input id="addName" placeholder="الاسم الثلاثي" />
+            </div>
+            <div>
+              <label>رقم الجوال</label>
+              <input id="addPhone" placeholder="05XXXXXXXX" inputmode="numeric" />
+            </div>
+            <div>
+              <label>الصف</label>
+              <select id="addClass">
+                <option value="رابع 1">رابع 1</option>
+                <option value="رابع 2">رابع 2</option>
+                <option value="خامس 1">خامس 1</option>
+                <option value="خامس 2">خامس 2</option>
+                <option value="سادس 1">سادس 1</option>
+                <option value="سادس 2">سادس 2</option>
+              </select>
+            </div>
+            <div style="display:flex;align-items:flex-end">
+              <button class="btn2 primary" style="width:100%" id="addBtn">إضافة</button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <h3 style="margin:6px 0 6px 0;font-size:15px">نص رسالة واتساب</h3>
+          <p class="small">
+            يمكنك تعديل نص الرسالة داخل الكود في دالة <b>buildWhatsappMessage</b>.
+          </p>
+          <ul style="margin:8px 0 0 0;padding:0 18px;color:var(--muted);font-size:13px;line-height:1.8">
+            <li>زر واتساب يظهر للغائب فقط.</li>
+            <li>زر “نسخ الرسالة” ينسخ النص الجاهز للحافظة.</li>
+          </ul>
+        </aside>
+      </div>
+    </main>
+  </section>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // ======= CONFIG (Login) =======
+    const AUTH_USER = "user1";
+    const AUTH_PASS = "12345";
+
+    // ======= Storage Keys =======
+    const KEY_AUTH = "attendance_auth_ok_v1";
+    const KEY_DATA = "attendance_students_v1";
+    const KEY_META = "attendance_meta_v1";
+
+    // ======= Default Data (يمكنك حذفها أو تعديلها) =======
+    const defaultStudents = [
+      { id: cryptoId(), no: 1,  name: "محمد أحمد الغامدي", phone: "0501234561", className: "رابع 1", status: "present" },
+      { id: cryptoId(), no: 2,  name: "خالد سعيد الزهراني", phone: "0501234562", className: "رابع 1", status: "present" },
+      { id: cryptoId(), no: 3,  name: "عبدالله حسن المالكي", phone: "0501234563", className: "رابع 1", status: "present" },
+      { id: cryptoId(), no: 4,  name: "فيصل علي القحطاني", phone: "0501234564", className: "رابع 1", status: "present" },
+      { id: cryptoId(), no: 5,  name: "ناصر محمد الشهري", phone: "0501234565", className: "رابع 1", status: "present" },
+    ];
+
+    // ======= State =======
+    let students = [];
+
+    // ======= Elements =======
+    const loginPage = document.getElementById("loginPage");
+    const appPage = document.getElementById("appPage");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginMsg = document.getElementById("loginMsg");
+    const username = document.getElementById("username");
+    const password = document.getElementById("password");
+
+    const todayLine = document.getElementById("todayLine");
+    const lastSaved = document.getElementById("lastSaved");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const stTotal = document.getElementById("stTotal");
+    const stPresent = document.getElementById("stPresent");
+    const stAbsent = document.getElementById("stAbsent");
+    const stRate = document.getElementById("stRate");
+
+    const searchBox = document.getElementById("searchBox");
+    const classFilter = document.getElementById("classFilter");
+    const statusFilter = document.getElementById("statusFilter");
+    const studentsTbody = document.getElementById("studentsTbody");
+
+    const addName = document.getElementById("addName");
+    const addPhone = document.getElementById("addPhone");
+    const addClass = document.getElementById("addClass");
+    const addBtn = document.getElementById("addBtn");
+
+    const exportCSV = document.getElementById("exportCSV");
+    const resetDay = document.getElementById("resetDay");
+
+    const toast = document.getElementById("toast");
+
+    // ======= Helpers =======
+    function cryptoId(){
+      return (crypto?.randomUUID?.() || ("id_" + Math.random().toString(16).slice(2)));
+    }
+
+    function nowStamp(){
+      const d = new Date();
+      return d.toLocaleString("ar-SA", { hour12: true });
+    }
+
+    function todayText(){
+      const d = new Date();
+      return d.toLocaleDateString("ar-SA", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+    }
+
+    function toastShow(text){
+      toast.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> toast.classList.remove("show"), 1700);
+    }
+
+    function saveAll(){
+      localStorage.setItem(KEY_DATA, JSON.stringify(students));
+      localStorage.setItem(KEY_META, JSON.stringify({ savedAt: nowStamp() }));
+      updateSavedChip();
+    }
+
+    function loadAll(){
+      const raw = localStorage.getItem(KEY_DATA);
+      if(raw){
+        try { students = JSON.parse(raw) || []; } catch { students = []; }
+      } else {
+        students = defaultStudents;
+        saveAll();
+      }
+      normalizeNos();
+      updateSavedChip();
+    }
+
+    function updateSavedChip(){
+      const mraw = localStorage.getItem(KEY_META);
+      if(!mraw){ lastSaved.textContent = "آخر حفظ: —"; return; }
+      try{
+        const meta = JSON.parse(mraw);
+        lastSaved.textContent = "آخر حفظ: " + (meta.savedAt || "—");
+      }catch{
+        lastSaved.textContent = "آخر حفظ: —";
+      }
+    }
+
+    function normalizeNos(){
+      students.sort((a,b)=> (a.no||0) - (b.no||0));
+      students.forEach((s, idx)=> s.no = idx + 1);
+    }
+
+    function computeStats(list){
+      const total = list.length;
+      const present = list.filter(s=> s.status === "present").length;
+      const absent = list.filter(s=> s.status === "absent").length;
+      const rate = total ? Math.round((present/total)*100) : 0;
+      return { total, present, absent, rate };
+    }
+
+    function badge(status){
+      if(status === "absent") return `<span class="badge bad">غائب</span>`;
+      return `<span class="badge good">حاضر</span>`;
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // ======= WhatsApp =======
+    function toE164Saudi(phone){
+      // Accept: 05XXXXXXXX => 9665XXXXXXXX
+      const p = String(phone || "").trim().replace(/\s+/g, "");
+      if(/^05\d{8}$/.test(p)) return "966" + p.slice(1);
+      if(/^9665\d{8}$/.test(p)) return p;
+      // fallback: return as-is (but may not work)
+      return p.replace(/^\+/, "");
+    }
+
+    function buildWhatsappMessage(student){
+      const date = new Date().toLocaleDateString("ar-SA", { year:"numeric", month:"2-digit", day:"2-digit" });
+      // رسالة رسمية جاهزة (عدّلها كما تريد)
+      return (
+`السلام عليكم ورحمة الله وبركاته
+ولي أمر الطالب: ${student.name}
+نفيدكم بأن الطالب ${student.name} من الصف ${student.className} قد تغيب اليوم بتاريخ ${date}.
+
+شاكرين تعاونكم.
+مع خالص التحية والتقدير،
+متابعة طلاب الاستاذ : سعيد الغامدي`
+      );
+    }
+
+    function whatsappLink(student){
+      const phone = toE164Saudi(student.phone);
+      const text = buildWhatsappMessage(student);
+      return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        toastShow("تم نسخ الرسالة ✅");
+      }catch{
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        toastShow("تم نسخ الرسالة ✅");
+      }
+    }
+
+    // ======= UI (Render) =======
+    function applyFilters(){
+      const q = (searchBox.value || "").trim();
+      const c = classFilter.value;
+      const st = statusFilter.value;
+
+      let list = [...students];
+
+      if(q){
+        list = list.filter(s => (s.name || "").includes(q));
+      }
+      if(c){
+        list = list.filter(s => s.className === c);
+      }
+      if(st){
+        list = list.filter(s => s.status === st);
+      }
+
+      render(list);
+    }
+
+    function render(list){
+      const stats = computeStats(students);
+      stTotal.textContent = stats.total;
+      stPresent.textContent = stats.present;
+      stAbsent.textContent = stats.absent;
+      stRate.textContent = stats.rate + "%";
+
+      studentsTbody.innerHTML = list.map(s => {
+        const waButtons = (s.status === "absent")
+          ? `
+            <button class="mini warn" data-action="copymsg" data-id="${s.id}">نسخ الرسالة</button>
+            <button class="mini warn" data-action="whatsapp" data-id="${s.id}">واتساب</button>
+          `
+          : "";
+
+        return `
+          <tr>
+            <td>${s.no}</td>
+            <td>${escapeHtml(s.name)}</td>
+            <td>${escapeHtml(s.phone)}</td>
+            <td>${escapeHtml(s.className)}</td>
+            <td>${badge(s.status)}</td>
+            <td>
+              <div class="cell-actions">
+                <button class="mini ${s.status === "absent" ? "good":"bad"}" data-action="toggle" data-id="${s.id}">تبديل</button>
+                ${waButtons}
+                <button class="mini" data-action="delete" data-id="${s.id}">حذف</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("") || `
+        <tr><td colspan="6" style="text-align:center;color:var(--muted);border-radius:14px">لا توجد نتائج مطابقة.</td></tr>
+      `;
+    }
+
+    // ======= Events =======
+    loginBtn.addEventListener("click", doLogin);
+    password.addEventListener("keydown", (e)=>{ if(e.key==="Enter") doLogin(); });
+    username.addEventListener("keydown", (e)=>{ if(e.key==="Enter") doLogin(); });
+
+    function doLogin(){
+      const u = (username.value || "").trim();
+      const p = (password.value || "").trim();
+      if(u === AUTH_USER && p === AUTH_PASS){
+        localStorage.setItem(KEY_AUTH, "1");
+        loginMsg.style.display = "none";
+        showApp();
+      } else {
+        loginMsg.style.display = "block";
+      }
+    }
+
+    logoutBtn.addEventListener("click", ()=>{
+      localStorage.removeItem(KEY_AUTH);
+      showLogin();
+    });
+
+    searchBox.addEventListener("input", applyFilters);
+    classFilter.addEventListener("change", applyFilters);
+    statusFilter.addEventListener("change", applyFilters);
+
+    studentsTbody.addEventListener("click", async (e)=>{
+      const btn = e.target.closest("button");
+      if(!btn) return;
+      const id = btn.getAttribute("data-id");
+      const action = btn.getAttribute("data-action");
+      const idx = students.findIndex(s=> s.id === id);
+      if(idx < 0) return;
+
+      const s = students[idx];
+
+      if(action === "toggle"){
+        students[idx].status = (s.status === "absent") ? "present" : "absent";
+        saveAll();
+        applyFilters();
+      }
+
+      if(action === "delete"){
+        if(confirm("هل تريد حذف الطالب؟")){
+          students.splice(idx, 1);
+          normalizeNos();
+          saveAll();
+          applyFilters();
+        }
+      }
+
+      if(action === "copymsg"){
+        const msg = buildWhatsappMessage(s);
+        await copyText(msg);
+      }
+
+      if(action === "whatsapp"){
+        // فقط للغائبين (احتياط)
+        if(s.status !== "absent"){
+          toastShow("اجعل الحالة غائب أولاً");
+          return;
+        }
+        window.open(whatsappLink(s), "_blank");
+      }
+    });
+
+    addBtn.addEventListener("click", ()=>{
+      const name = (addName.value || "").trim();
+      const phone = (addPhone.value || "").trim();
+      const className = addClass.value;
+
+      if(!name){
+        alert("فضلاً أدخل اسم الطالب.");
+        return;
+      }
+      if(!/^05\d{8}$/.test(phone)){
+        alert("رقم الجوال غير صحيح. يجب أن يكون مثل: 05XXXXXXXX (10 أرقام).");
+        return;
+      }
+
+      students.push({
+        id: cryptoId(),
+        no: students.length + 1,
+        name,
+        phone,
+        className,
+        status: "present"
+      });
+
+      addName.value = "";
+      addPhone.value = "";
+      saveAll();
+      applyFilters();
+    });
+
+    resetDay.addEventListener("click", ()=>{
+      if(!confirm("سيتم إعادة تعيين حالات الجميع إلى (حاضر). هل أنت متأكد؟")) return;
+      students = students.map(s => ({...s, status:"present"}));
+      saveAll();
+      applyFilters();
+    });
+
+    exportCSV.addEventListener("click", ()=>{
+      const headers = ["م","الاسم","رقم الجوال","الصف","الحالة"];
+      const rows = students.map(s => [
+        s.no,
+        s.name,
+        s.phone,
+        s.className,
+        (s.status === "absent" ? "غائب" : "حاضر")
+      ]);
+      const csv = [headers, ...rows]
+        .map(r => r.map(x => `"${String(x).replaceAll('"','""')}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "attendance.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // ======= Navigation =======
+    function showLogin(){
+      loginPage.classList.remove("hidden");
+      appPage.classList.add("hidden");
+      username.value = "";
+      password.value = "";
+      loginMsg.style.display = "none";
+    }
+
+    function showApp(){
+      loginPage.classList.add("hidden");
+      appPage.classList.remove("hidden");
+      todayLine.textContent = "تاريخ اليوم: " + todayText();
+      loadAll();
+      applyFilters();
+    }
+
+    // ======= Boot =======
+    (function init(){
+      const ok = localStorage.getItem(KEY_AUTH) === "1";
+      if(ok) showApp();
+      else showLogin();
+    })();
+  </script>
+</body>
+</html>
